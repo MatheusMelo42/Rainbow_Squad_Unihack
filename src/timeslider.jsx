@@ -10,8 +10,8 @@ export function TimeSlider({changeHandler}) {
    
     return (
       <TooltipSlider
-        min={2023}
-        max={2030}
+        min={2019}
+        max={2028}
         defaultValue={2023}
         value={currentValue}
         onChange={(value) => {changeHandler(value); setCurrentValue(value);}}

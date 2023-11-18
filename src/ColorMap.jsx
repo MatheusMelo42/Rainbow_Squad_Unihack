@@ -11,21 +11,16 @@ import { Icon, divIcon, point } from "leaflet";
 
 import './index.css';
 
-import countries from './romania-with-regions.json';
-
-const customIcon = new Icon({
-    // iconUrl: "https://cdn-icons-png.flaticon.com/512/447/447031.png",
-    iconUrl: require("./icon.png"),
-    iconSize: [38, 38] // size of the icon
-  });
+import countries from './population.json';
+import trashcans from './trash_cans.json';
 
 const dataScopes = [
     {
         name: "Population",
-        key: "pop_est",
+        key: 'pop',
         description: "The population of the region",
         unit: "",
-        scale: [10000, 50000, 100000, 250000, 500000, 1000000, 2500000]
+        scale: [100, 500, 1000, 2500, 5000, 10000, 25000]
     },
     {
         name: "Trashcans",
@@ -43,21 +38,6 @@ const dataScopes = [
     }
 ];
 
-const markers = [
-    {
-      geocode: [45.76, 21.22],
-      popUp: "Hello, I am pop up 1"
-    },
-    {
-      geocode: [45.79, 21.16],
-      popUp: "Hello, I am pop up 2"
-    },
-    {
-      geocode: [45.84, 21.29],
-      popUp: "Hello, I am pop up 3"
-    }
-  ];
-
 const colors = [
     ['#fcfca7', '#f4e283', '#eec762', '#e8ab44', '#e28d2b', '#dc6e16', '#d4490a', '#cb0c0c'],
     ['#ffffd9', '#edf8b1', '#c7e9b4', '#7fcdbb', '#41b6c4', '#1d91c0', '#225ea8', '#253494', '#081d58']
@@ -70,6 +50,44 @@ export default function ChoroplethMap() {
     const [timeScope, setTimeScope] = useState(2023);
 
     const geoMap = useRef(null);
+
+    const customIcon = (type_color) => {
+        let iconUrl = require("./icon.png");
+        let iconSize = [38, 38];
+        /**
+        if (type_color === "glass") {
+            iconUrl = require("./glass_icon.png");
+        } else if (type_color === "expired medicines") {
+            iconUrl = require("./pink_icon.png");
+        } else if (type_color === "used oil") {
+            iconUrl = require("./red_icon.png");
+        } else if (type_color === "cardboard, paper, plastic") {
+            iconUrl = require("./green_icon.png");
+        } else if (type_color === "aluminum cans, batteries, glass, bulbs, paper, plasti") {
+            iconUrl = require("./yellow_icon.png");
+        } else if (type_color === "batteries, used motor oil, used oil") {
+            iconUrl = require("./red_icon.png");
+        } else if (type_color === "clothing") {
+            iconUrl = require("./beige_icon.png");
+        } else if (type_color === "aluminum cans, batteries, glass, bulbs, plastic") {
+            iconUrl = require("./yellow_icon.png");
+        } else if (type_color === "batteries, glass, paper") {
+            iconUrl = require("./pink_icon.png");
+        } else if (type_color === "small appliances, batteries, bulbs") {
+            iconUrl = require("./yellow_icon.png");
+        } else if (type_color === 'cardboard, polystyrene, bulky waste') {
+            iconUrl = require("./blue_icon.png");
+        } else if (type_color === 'aluminum cans, small appliances, batteries, glass, bulbs, paper, plastic') {
+            iconUrl = require("./black_icon.png");
+        } else {
+            iconUrl = require("./darkpurple_icon.png");
+        }
+        */
+        return new Icon({
+            iconUrl,
+            iconSize
+        });
+    };
 
     const handleDataScopeChange = (event) => {
         setDataScope(dataScopes.find(element => element.key === event.target.value));
@@ -98,14 +116,16 @@ export default function ChoroplethMap() {
     }
 
     const onEachFeature = useCallback((feature, layer) => {
-        
+        var dataName = dataScope.key;
+            if (dataScope.key === 'pop') {
+                dataName = 'pop' + timeScope;
+            }
 
         if (geoMap.current) {
             const current = geoMap.current.getLayers().find(e => e.feature.properties.iso_a3 === feature.properties.iso_a3);
-
-            current.setTooltipContent(`<div><span>${dataScope.name}</span>: ${feature.properties[dataScope.key]}</div>`);
+            current.setTooltipContent(`<div><span>${dataScope.name}</span>: ${Math.round(feature.properties[dataName])}</div>`);
         } else {
-            layer.bindTooltip(`<div><span>${dataScope.name}</span>: ${feature.properties[dataScope.key]}</div>`, { sticky: true });
+            layer.bindTooltip(`<div><span>${dataScope.name}</span>: ${Math.round(feature.properties[dataName])}</div>`, { sticky: true });
 
             layer.on({
                 mouseover: highlightFeature,
@@ -117,7 +137,7 @@ export default function ChoroplethMap() {
 
     const style = useCallback((feature) => {
         let mapStyle = {
-            fillColor: getColor(feature.properties[dataScope.key], colors, dataScope.scale),
+            fillColor: getColor(feature.properties[dataScope.key + timeScope], colors, dataScope.scale),
             weight: 1,
             opacity: 1,
             color: '#888',
@@ -143,27 +163,27 @@ export default function ChoroplethMap() {
 
     return (
         <div className='mapContainer' >
-            <MapContainer center={[47, 25]}
+            <MapContainer center={[45.76, 21.22]}
                 zoomControl={false}
-                zoom={6}
+                zoom={12}
                 maxZoom={18}
-                minZoom={6}
+                minZoom={10}
                 zoomSnap={0.5}
                 zoomDelta={0.5}
                 wheelPxPerZoomLevel={120}
                 maxBoundsViscosity={0.5}
-                maxBounds={L.latLngBounds(new L.LatLng(70, 0), new L.LatLng(20, 50))}>
+                maxBounds={L.latLngBounds(new L.LatLng(50, 15), new L.LatLng(40, 25))}>
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 {geoJsonComponent}
-                <InfoBox data={selectedCountry} scope={dataScope} />
+                <InfoBox data={selectedCountry} year={timeScope}/>
                 <Legend scope={dataScope} colors={colors} hoveredCountry={hoveredCountry} />
                 <MarkerClusterGroup
                     chunkedLoading
                     iconCreateFunction={createClusterCustomIcon}
                 >
-                    {markers.map((marker) => (
-                    <Marker position={marker.geocode} icon={customIcon} key={marker.popUp}>
-                        <Popup>{marker.popUp}</Popup>
+                    {trashcans.map((marker) => (
+                    <Marker position={marker.geometry.coordinates} icon={customIcon(marker.properties.Type)} key={marker.properties.id}>
+                        <Popup>{marker.properties.adresa}</Popup>
                     </Marker>
                     ))}
                 </MarkerClusterGroup>

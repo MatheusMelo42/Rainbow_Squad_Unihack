@@ -2,22 +2,25 @@ import Control from "react-leaflet-custom-control";
 
 import './infobox.css';
 
-function numberWithCommas(x) {
+function numberRounded(x) {
   if (x != null) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return Math.round(x);
   } else {
     return '';
   }
 }
 
-export function InfoBox({ data, scope }) {
+export function InfoBox({ data, year }) {
   let infoBox;
   if (data != null) {
     infoBox = <div className="info"><h4>{data.name}</h4>
       <br></br>
-      <b>{scope.name}:</b> {numberWithCommas(data[scope.key])} {scope.unit}
+      <b>Population:</b> {numberRounded(data['pop' + year])} 
       <br></br>
-      <b>Description:</b> {scope.description}</div>;
+      <b>Trashcans:</b> {numberRounded(data['trashcans'])} 
+      <br></br>
+      <b>Trashcans per 1000 People:</b> {numberRounded(data['trashcans1000'])} </div>
+      ;
   } else {
     infoBox = <h4><i>select a country</i></h4>;
   }
