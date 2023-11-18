@@ -5,11 +5,7 @@ import { InfoBox } from './InfoBox';
 import { Legend } from './Legend';
 import { DataScopeSelector } from './DataScopeSelector';
 import { getColor } from './util';
-/**
-import retextEquality from 'retext-equality'
-import {unified} from 'unified'
-import {reporter} from 'vfile-reporter'
-*/
+
 import './index.css';
 
 import countries from './romania-with-regions.json';
@@ -37,13 +33,6 @@ const colors = [
 ]
 
 export default function ChoroplethMap() {
-    /**
-    const file = unified()
-  .use(retextEquality)
-  .process('Now that the child elements are floated, obviously the parent element will collapse.')
-
-console.error(reporter(file))
-*/
     const [dataScope, setDataScope] = useState(dataScopes[0]);
     const [selectedCountry, setSelectedCountry] = useState(null);
     const [hoveredCountry, setHoveredCountry] = useState(null);
@@ -110,16 +99,16 @@ console.error(reporter(file))
 
     return (
         <div className='mapContainer' >
-            <MapContainer center={[40, 0]}
+            <MapContainer center={[47, 25]}
                 zoomControl={false}
-                zoom={2.5}
-                maxZoom={8}
-                minZoom={2}
+                zoom={6}
+                maxZoom={10}
+                minZoom={6}
                 zoomSnap={0.5}
                 zoomDelta={0.5}
                 wheelPxPerZoomLevel={120}
                 maxBoundsViscosity={0.5}
-                maxBounds={L.latLngBounds(new L.LatLng(85, -210), new L.LatLng(-85, 210))}>
+                maxBounds={L.latLngBounds(new L.LatLng(70, 0), new L.LatLng(20, 50))}>
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 {geoJsonComponent}
                 <InfoBox data={selectedCountry} scope={dataScope} />
