@@ -1,31 +1,62 @@
 import {useState, useRef, useMemo, useCallback } from 'react';
-import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet'
+import { MapContainer, TileLayer, GeoJSON, Marker, Popup } from 'react-leaflet'
+import MarkerClusterGroup from "react-leaflet-cluster";
 import L from 'leaflet';
 import { InfoBox } from './InfoBox';
 import { Legend } from './Legend';
+import { TimeSlider } from './timeslider';
 import { DataScopeSelector } from './DataScopeSelector';
 import { getColor } from './util';
+import { Icon, divIcon, point } from "leaflet";
 
 import './index.css';
 
 import countries from './romania-with-regions.json';
 
+const customIcon = new Icon({
+    // iconUrl: "https://cdn-icons-png.flaticon.com/512/447/447031.png",
+    iconUrl: require("./icon.png"),
+    iconSize: [38, 38] // size of the icon
+  });
+
 const dataScopes = [
     {
         name: "Population",
         key: "pop_est",
-        description: "The population of the country",
+        description: "The population of the region",
         unit: "",
-        scale: [5000000, 10000000, 25000000, 50000000, 75000000, 100000000, 200000000, 1000000000]
+        scale: [10000, 50000, 100000, 250000, 500000, 1000000, 2500000]
     },
     {
-        name: "GDP",
-        key: "gdp_md_est",
-        description: "The GDP of the country",
-        unit: "USD",
-        scale: [100000, 250000, 500000, 1000000, 2500000, 5000000, 15000000]
+        name: "Trashcans",
+        key: "trashcans",
+        description: "Amount of trashcans in the region",
+        unit: "",
+        scale: [1000, 5000, 10000, 25000, 50000, 100000, 250000]
+    },
+    {
+        name: "Trashcans per 1000 people",
+        key: "trashcan1000",
+        description: "Amount of trashcans per thousand people",
+        unit: "",
+        scale: [10, 50, 100, 250, 500, 1000, 2500]
     }
 ];
+
+const markers = [
+    {
+      geocode: [45.76, 21.22],
+      popUp: "Hello, I am pop up 1"
+    },
+    {
+      geocode: [45.79, 21.16],
+      popUp: "Hello, I am pop up 2"
+    },
+    {
+      geocode: [45.84, 21.29],
+      popUp: "Hello, I am pop up 3"
+    }
+  ];
 
 const colors = [
     ['#fcfca7', '#f4e283', '#eec762', '#e8ab44', '#e28d2b', '#dc6e16', '#d4490a', '#cb0c0c'],
@@ -36,11 +67,16 @@ export default function ChoroplethMap() {
     const [dataScope, setDataScope] = useState(dataScopes[0]);
     const [selectedCountry, setSelectedCountry] = useState(null);
     const [hoveredCountry, setHoveredCountry] = useState(null);
+    const [timeScope, setTimeScope] = useState(2023);
 
     const geoMap = useRef(null);
 
     const handleDataScopeChange = (event) => {
         setDataScope(dataScopes.find(element => element.key === event.target.value));
+    }
+
+    const handleTimeScopeChange = (event) => {
+        setTimeScope(event);
     }
 
     const highlightFeature = (e) => {
@@ -97,12 +133,20 @@ export default function ChoroplethMap() {
         [style, onEachFeature]
     );
 
+    const createClusterCustomIcon = function (cluster) {
+        return new divIcon({
+        html: `<span class="cluster-icon">${cluster.getChildCount()}</span>`,
+        className: "custom-marker-cluster",
+        iconSize: point(33, 33, true)
+        });
+    };
+
     return (
         <div className='mapContainer' >
             <MapContainer center={[47, 25]}
                 zoomControl={false}
                 zoom={6}
-                maxZoom={10}
+                maxZoom={18}
                 minZoom={6}
                 zoomSnap={0.5}
                 zoomDelta={0.5}
@@ -113,8 +157,19 @@ export default function ChoroplethMap() {
                 {geoJsonComponent}
                 <InfoBox data={selectedCountry} scope={dataScope} />
                 <Legend scope={dataScope} colors={colors} hoveredCountry={hoveredCountry} />
+                <MarkerClusterGroup
+                    chunkedLoading
+                    iconCreateFunction={createClusterCustomIcon}
+                >
+                    {markers.map((marker) => (
+                    <Marker position={marker.geocode} icon={customIcon} key={marker.popUp}>
+                        <Popup>{marker.popUp}</Popup>
+                    </Marker>
+                    ))}
+                </MarkerClusterGroup>
             </MapContainer>
             <DataScopeSelector options={dataScopes} value={dataScope} changeHandler={handleDataScopeChange} />
+            <TimeSlider value={timeScope} changeHandler={handleTimeScopeChange}/>
         </div>
     );
 }
