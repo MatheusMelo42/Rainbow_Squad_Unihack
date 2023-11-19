@@ -58,8 +58,7 @@ const dataScopes = [
  * @type {Array<Array<string>>}
  */
 const colors = [
-    ['#fcfca7', '#f4e283', '#eec762', '#e8ab44', '#e28d2b', '#dc6e16', '#d4490a', '#cb0c0c'],
-    ['#ffffd9', '#edf8b1', '#c7e9b4', '#7fcdbb', '#41b6c4', '#1d91c0', '#225ea8', '#253494', '#081d58']
+    ['#fcfca7', '#f4e283', '#eec762', '#e8ab44', '#e28d2b', '#dc6e16', '#d4490a', '#cb0c0c']
 ]
 
 /**
@@ -72,7 +71,7 @@ export default function ChoroplethMap() {
     const [selectedCountry, setSelectedCountry] = useState(null);
     const [hoveredCountry, setHoveredCountry] = useState(null);
     const [timeScope, setTimeScope] = useState(2023);
-    const [canScope, setCanScope] = useState(CustomIconType.ALL);
+    const [canScope, setCanScope] = useState('ALL');
 
     const geoMap = useRef(null);
 
@@ -201,7 +200,7 @@ export default function ChoroplethMap() {
                     iconCreateFunction={createClusterCustomIcon}
                 >
                     {trashcans
-                        .filter((marker) => canScope === CustomIconType['ALL'] || marker.properties.Type === CustomIconType[canScope])
+                        .filter((marker) => canScope === 'ALL' || marker.properties.Type === CustomIconType[canScope])
                         .map((marker) => (
                             <Marker position={marker.geometry.coordinates} icon={getCustomIcon(marker.properties.Type)} key={marker.properties.id}>
                                 <Popup>
