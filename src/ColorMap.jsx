@@ -38,15 +38,36 @@ const dataScopes = [
         scale: [100, 500, 1000, 2500, 5000, 10000, 25000]
     },
     {
-        name: "Trashcans",
-        key: "n_trash_cans_in_buffer",
+        name: "Trashcan Availability",
+        key: "n_trash_cans_in_buffer_scaled",
         description: "Amount of trashcans in the region",
         unit: "",
         scale: [1, 5, 10, 25, 40, 70, 100]
     },
     {
-        name: "Trashcans per 1000 people",
-        key: "trashcan1000",
+        name: "Acessibility Index A",
+        key: "recycling_acessibility_index_A",
+        description: "Amount of trashcans per thousand people",
+        unit: "",
+        scale: [1, 5, 10, 15, 20, 25, 30]
+    },
+    {
+        name: "Acessibility Index B",
+        key: "recycling_acessibility_index_B",
+        description: "Amount of trashcans per thousand people",
+        unit: "",
+        scale: [1, 5, 10, 15, 20, 25, 30]
+    },
+    {
+        name: "Acessibility Index C",
+        key: "recycling_acessibility_index_C",
+        description: "Amount of trashcans per thousand people",
+        unit: "",
+        scale: [1, 5, 10, 15, 20, 25, 30]
+    },
+    {
+        name: "Acessibility Index D",
+        key: "recycling_acessibility_index_D",
         description: "Amount of trashcans per thousand people",
         unit: "",
         scale: [1, 5, 10, 15, 20, 25, 30]
@@ -144,13 +165,16 @@ export default function ChoroplethMap() {
      * @returns {Object} The style object.
      */
     const style = useCallback((feature) => {
-        var dataName = dataScope.key;
+        var data = feature.properties[dataScope.key];
         if (dataScope.key === 'pop') {
-            dataName = 'pop' + timeScope;
+            data = feature.properties['pop' + timeScope];
+        }
+        if (dataScope.key === 'n_trash_cans_in_buffer_scaled') {
+            data = data * 100;
         }
 
         let mapStyle = {
-            fillColor: getColor(feature.properties[dataName], colors, dataScope.scale),
+            fillColor: getColor(data, colors, dataScope.scale),
             weight: 1,
             opacity: 1,
             color: '#888',
