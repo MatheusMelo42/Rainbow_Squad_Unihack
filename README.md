@@ -1,6 +1,6 @@
 # Trash Can Analysis Dashboard for Timisoara
 
-This project is a React-based dashboard for analyzing trash cans in Timisoara.
+This project is a React-based dashboard that analysis the availabilty of trash cans and forecasts the mismatch between supply and demand in Timisoara across space and time with AI. empowering policymakers to better posiiton new investments on recycling and waste management  infrastructure as well as citizens looking for where to recycle their trash
 
 ## Getting Started
 
