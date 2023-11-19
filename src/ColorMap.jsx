@@ -52,37 +52,37 @@ export default function ChoroplethMap() {
     const geoMap = useRef(null);
 
     const customIcon = (type_color) => {
-        let iconUrl = require("./icon.png");
+        let iconUrl = require("./icon/icon.png");
         let iconSize = [38, 38];
         
         if (type_color === "glass") {
-            iconUrl = require("./glass_icon.png");
-        }/* else if (type_color === "expired medicines") {
-            iconUrl = require("./pink_icon.png");
+            iconUrl = require("./icon/glass_icon.png");
+        } else if (type_color === "expired medicines") {
+            iconUrl = require("./icon/pink_icon.png");
         } else if (type_color === "used oil") {
-            iconUrl = require("./red_icon.png");
+            iconUrl = require("./icon/red_icon.png");
         } else if (type_color === "cardboard, paper, plastic") {
-            iconUrl = require("./green_icon.png");
+            iconUrl = require("./icon/green_icon.png");
         } else if (type_color === "aluminum cans, batteries, glass, bulbs, paper, plasti") {
-            iconUrl = require("./yellow_icon.png");
+            iconUrl = require("./icon/yellow_icon.png");
         } else if (type_color === "batteries, used motor oil, used oil") {
-            iconUrl = require("./red_batteries_icon.png");
+            iconUrl = require("./icon/red_batteries_icon.png");
         } else if (type_color === "clothing") {
-            iconUrl = require("./beige_icon.png");
+            iconUrl = require("./icon/beige_icon.png");
         } else if (type_color === "aluminum cans, batteries, glass, bulbs, plastic") {
-            iconUrl = require("./yellow_cans_icon.png");
+            iconUrl = require("./icon/yellow_cans_icon.png");
         } else if (type_color === "batteries, glass, paper") {
-            iconUrl = require("./pink_icon.png");
+            iconUrl = require("./icon/pink_icon.png");
         } else if (type_color === "small appliances, batteries, bulbs") {
-            iconUrl = require("./yellow_batteries_icon.png");
+            iconUrl = require("./icon/yellow_batteries_icon.png");
         } else if (type_color === 'cardboard, polystyrene, bulky waste') {
-            iconUrl = require("./blue_icon.png");
+            iconUrl = require("./icon/blue_icon.png");
         } else if (type_color === 'aluminum cans, small appliances, batteries, glass, bulbs, paper, plastic') {
-            iconUrl = require("./black_icon.png");
+            iconUrl = require("./icon/black_icon.png");
         } else {
-            iconUrl = require("./darkpurple_icon.png");
+            iconUrl = require("./icon/darkpurple_icon.png");
         }
-        */
+        
         return new Icon({
             iconUrl,
             iconSize
