@@ -39,10 +39,10 @@ const dataScopes = [
     },
     {
         name: "Trashcans",
-        key: "trashcans",
+        key: "n_trash_cans_in_buffer",
         description: "Amount of trashcans in the region",
         unit: "",
-        scale: [1, 5, 10, 25, 40, 60, 80, 100]
+        scale: [1, 5, 10, 25, 40, 70, 100]
     },
     {
         name: "Trashcans per 1000 people",
@@ -145,8 +145,13 @@ export default function ChoroplethMap() {
      * @returns {Object} The style object.
      */
     const style = useCallback((feature) => {
+        var dataName = dataScope.key;
+        if (dataScope.key === 'pop') {
+            dataName = 'pop' + timeScope;
+        }
+
         let mapStyle = {
-            fillColor: getColor(feature.properties[dataScope.key + timeScope], colors, dataScope.scale),
+            fillColor: getColor(feature.properties[dataName], colors, dataScope.scale),
             weight: 1,
             opacity: 1,
             color: '#888',

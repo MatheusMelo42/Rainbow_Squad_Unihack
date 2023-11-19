@@ -31,7 +31,7 @@ export function InfoBox({ data, year }) {
       <br></br>
       <b>Population:</b> {numberRounded(data['pop' + year])} 
       <br></br>
-      <b>Trashcans:</b> {numberRounded(data['trashcans'])} 
+      <b>Trashcans:</b> {numberRounded(data['n_trash_cans_in_buffer'])} 
       <br></br>
       <b>Trashcans per 1000 People:</b> {numberRounded(data['trashcans1000'])} </div>
       ;
