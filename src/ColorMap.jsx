@@ -54,10 +54,10 @@ export default function ChoroplethMap() {
     const customIcon = (type_color) => {
         let iconUrl = require("./icon.png");
         let iconSize = [38, 38];
-        /**
+        
         if (type_color === "glass") {
             iconUrl = require("./glass_icon.png");
-        } else if (type_color === "expired medicines") {
+        }/* else if (type_color === "expired medicines") {
             iconUrl = require("./pink_icon.png");
         } else if (type_color === "used oil") {
             iconUrl = require("./red_icon.png");
@@ -183,7 +183,18 @@ export default function ChoroplethMap() {
                 >
                     {trashcans.map((marker) => (
                     <Marker position={marker.geometry.coordinates} icon={customIcon(marker.properties.Type)} key={marker.properties.id}>
-                        <Popup>{marker.properties.adresa}</Popup>
+                        <Popup>
+                            {'Address: ' + marker.properties.adresa}
+                            <br />
+                            {'Type: ' + marker.properties.Type}
+                            <br />
+                            {'Responsible Company: ' + marker.properties.companie}
+                            <br />
+                            {'Company Website: '}
+                            <a href={marker.properties.website} target="_blank" rel="noopener noreferrer">
+                                {marker.properties.website}
+                            </a>
+                        </Popup>
                     </Marker>
                     ))}
                 </MarkerClusterGroup>
