@@ -6,8 +6,9 @@ import { InfoBox } from './InfoBox';
 import { Legend } from './Legend';
 import { TimeSlider } from './timeslider';
 import { DataScopeSelector } from './DataScopeSelector';
-import { getColor } from './util';
-import { Icon, divIcon, point } from "leaflet";
+import { CanTypeScopeSelector }  from './CanTypeScopeSelector';
+import { getColor, getCustomIcon, CustomIconType } from './util';
+import { divIcon, point } from "leaflet";
 
 import './index.css';
 
@@ -48,46 +49,9 @@ export default function ChoroplethMap() {
     const [selectedCountry, setSelectedCountry] = useState(null);
     const [hoveredCountry, setHoveredCountry] = useState(null);
     const [timeScope, setTimeScope] = useState(2023);
+    const [canScope, setCanScope] = useState(CustomIconType.ALL);
 
     const geoMap = useRef(null);
-
-    const customIcon = (type_color) => {
-        let iconUrl = require("./icon/icon.png");
-        let iconSize = [38, 38];
-        
-        if (type_color === "glass") {
-            iconUrl = require("./icon/glass_icon.png");
-        } else if (type_color === "expired medicines") {
-            iconUrl = require("./icon/pink_icon.png");
-        } else if (type_color === "used oil") {
-            iconUrl = require("./icon/red_icon.png");
-        } else if (type_color === "cardboard, paper, plastic") {
-            iconUrl = require("./icon/green_icon.png");
-        } else if (type_color === "aluminum cans, batteries, glass, bulbs, paper, plasti") {
-            iconUrl = require("./icon/yellow_icon.png");
-        } else if (type_color === "batteries, used motor oil, used oil") {
-            iconUrl = require("./icon/red_batteries_icon.png");
-        } else if (type_color === "clothing") {
-            iconUrl = require("./icon/beige_icon.png");
-        } else if (type_color === "aluminum cans, batteries, glass, bulbs, plastic") {
-            iconUrl = require("./icon/yellow_cans_icon.png");
-        } else if (type_color === "batteries, glass, paper") {
-            iconUrl = require("./icon/pink_icon.png");
-        } else if (type_color === "small appliances, batteries, bulbs") {
-            iconUrl = require("./icon/yellow_batteries_icon.png");
-        } else if (type_color === 'cardboard, polystyrene, bulky waste') {
-            iconUrl = require("./icon/blue_icon.png");
-        } else if (type_color === 'aluminum cans, small appliances, batteries, glass, bulbs, paper, plastic') {
-            iconUrl = require("./icon/black_icon.png");
-        } else {
-            iconUrl = require("./icon/darkpurple_icon.png");
-        }
-        
-        return new Icon({
-            iconUrl,
-            iconSize
-        });
-    };
 
     const handleDataScopeChange = (event) => {
         setDataScope(dataScopes.find(element => element.key === event.target.value));
@@ -95,6 +59,10 @@ export default function ChoroplethMap() {
 
     const handleTimeScopeChange = (event) => {
         setTimeScope(event);
+    }
+
+    const handleCanScopeChange = (event) => {
+        setCanScope(event.target.value);
     }
 
     const highlightFeature = (e) => {
@@ -181,25 +149,28 @@ export default function ChoroplethMap() {
                     chunkedLoading
                     iconCreateFunction={createClusterCustomIcon}
                 >
-                    {trashcans.map((marker) => (
-                    <Marker position={marker.geometry.coordinates} icon={customIcon(marker.properties.Type)} key={marker.properties.id}>
-                        <Popup>
-                            {'Address: ' + marker.properties.adresa}
-                            <br />
-                            {'Type: ' + marker.properties.Type}
-                            <br />
-                            {'Responsible Company: ' + marker.properties.companie}
-                            <br />
-                            {'Company Website: '}
-                            <a href={marker.properties.website} target="_blank" rel="noopener noreferrer">
-                                {marker.properties.website}
-                            </a>
-                        </Popup>
-                    </Marker>
-                    ))}
+                    {trashcans
+                        .filter((marker) => canScope === CustomIconType['ALL'] || marker.properties.Type === CustomIconType[canScope])
+                        .map((marker) => (
+                            <Marker position={marker.geometry.coordinates} icon={getCustomIcon(marker.properties.Type)} key={marker.properties.id}>
+                                <Popup>
+                                    {'Address: ' + marker.properties.adresa}
+                                    <br />
+                                    {'Type: ' + marker.properties.Type}
+                                    <br />
+                                    {'Responsible Company: ' + marker.properties.companie}
+                                    <br />
+                                    {'Company Website: '}
+                                    <a href={marker.properties.website} target="_blank" rel="noopener noreferrer">
+                                        {marker.properties.website}
+                                    </a>
+                                </Popup>
+                            </Marker>
+                        ))}
                 </MarkerClusterGroup>
             </MapContainer>
             <DataScopeSelector options={dataScopes} value={dataScope} changeHandler={handleDataScopeChange} />
+            <CanTypeScopeSelector value={canScope} changeHandler={handleCanScopeChange} />
             <TimeSlider value={timeScope} changeHandler={handleTimeScopeChange}/>
         </div>
     );
