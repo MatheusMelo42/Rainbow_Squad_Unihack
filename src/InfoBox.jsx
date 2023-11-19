@@ -15,6 +15,8 @@ export function InfoBox({ data, year }) {
   if (data != null) {
     infoBox = <div className="info"><h4>{data.name}</h4>
       <br></br>
+      <b>GRD_ID:</b> {data.GRD_ID}
+      <br></br>
       <b>Population:</b> {numberRounded(data['pop' + year])} 
       <br></br>
       <b>Trashcans:</b> {numberRounded(data['trashcans'])} 
