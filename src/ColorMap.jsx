@@ -27,14 +27,14 @@ const dataScopes = [
         key: "trashcans",
         description: "Amount of trashcans in the region",
         unit: "",
-        scale: [1000, 5000, 10000, 25000, 50000, 100000, 250000]
+        scale: [1, 5, 10, 25, 40, 60, 80, 100]
     },
     {
         name: "Trashcans per 1000 people",
         key: "trashcan1000",
         description: "Amount of trashcans per thousand people",
         unit: "",
-        scale: [10, 50, 100, 250, 500, 1000, 2500]
+        scale: [1, 5, 10, 15, 20, 25, 30]
     }
 ];
 
@@ -66,15 +66,15 @@ export default function ChoroplethMap() {
         } else if (type_color === "aluminum cans, batteries, glass, bulbs, paper, plasti") {
             iconUrl = require("./yellow_icon.png");
         } else if (type_color === "batteries, used motor oil, used oil") {
-            iconUrl = require("./red_icon.png");
+            iconUrl = require("./red_batteries_icon.png");
         } else if (type_color === "clothing") {
             iconUrl = require("./beige_icon.png");
         } else if (type_color === "aluminum cans, batteries, glass, bulbs, plastic") {
-            iconUrl = require("./yellow_icon.png");
+            iconUrl = require("./yellow_cans_icon.png");
         } else if (type_color === "batteries, glass, paper") {
             iconUrl = require("./pink_icon.png");
         } else if (type_color === "small appliances, batteries, bulbs") {
-            iconUrl = require("./yellow_icon.png");
+            iconUrl = require("./yellow_batteries_icon.png");
         } else if (type_color === 'cardboard, polystyrene, bulky waste') {
             iconUrl = require("./blue_icon.png");
         } else if (type_color === 'aluminum cans, small appliances, batteries, glass, bulbs, paper, plastic') {
