@@ -2,6 +2,11 @@ import Control from "react-leaflet-custom-control";
 
 import './infobox.css';
 
+/**
+ * Rounds a number to the nearest integer.
+ * @param {number} x - The number to be rounded.
+ * @returns {number|string} - The rounded number or an empty string if the input is null.
+ */
 function numberRounded(x) {
   if (x != null) {
     return Math.round(x);
@@ -10,6 +15,13 @@ function numberRounded(x) {
   }
 }
 
+/**
+ * Renders an information box component.
+ * @param {Object} props - The component props.
+ * @param {Object} props.data - The data object containing information.
+ * @param {number} props.year - The year for which data is displayed.
+ * @returns {JSX.Element} The rendered information box component.
+ */
 export function InfoBox({ data, year }) {
   let infoBox;
   if (data != null) {

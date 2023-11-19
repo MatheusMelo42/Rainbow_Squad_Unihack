@@ -2,6 +2,15 @@ import Control from "react-leaflet-custom-control";
 import { getColor } from './util';
 import './legend.css';
 
+/**
+ * Renders a legend component.
+ * @param {Object} props - The component props.
+ * @param {Object} props.scope - The scope object.
+ * @param {Array} props.colors - The colors array.
+ * @param {Object} props.hoveredCountry - The hovered country object.
+ * @returns {JSX.Element} The legend component.
+ */
+
 export function Legend({ scope, colors, hoveredCountry }) {
     let legend = [];
 

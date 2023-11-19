@@ -1,6 +1,14 @@
 import { CustomIconType } from './util';
 import './CanTypeScopeSelector.css';
 
+/**
+ * Renders a select input for selecting a can type scope.
+ * 
+ * @param {Object} props - The component props.
+ * @param {string} props.value - The currently selected value.
+ * @param {function} props.changeHandler - The change handler function.
+ * @returns {JSX.Element} The rendered select input.
+ */
 export function CanTypeScopeSelector({ value, changeHandler }) {
     const optionsArray = Object.keys(CustomIconType).map(key => ({
         key: key,

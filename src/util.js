@@ -1,5 +1,12 @@
 import { Icon} from "leaflet";
 
+/**
+ * Returns the color based on the given value, colors, and scale.
+ * @param {number} val - The value to determine the color for.
+ * @param {string[]} colors - An array of color codes.
+ * @param {number[]} scale - An array of scale values.
+ * @returns {string} The color code.
+ */
 export function getColor(val, colors, scale) {
     if (!val) {
         return '#ddd';
@@ -16,6 +23,23 @@ export function getColor(val, colors, scale) {
     return colorsToUse[colorsToUse.length - 1];
 }
 
+/**
+ * CustomIconType represents the different types of custom icons.
+ * @typedef {Object} CustomIconType
+ * @property {string} ALL - Represents all custom icons.
+ * @property {string} GLASS - Represents the glass custom icon.
+ * @property {string} EXPIRED_MEDICINES - Represents the expired medicines custom icon.
+ * @property {string} USED_OIL - Represents the used oil custom icon.
+ * @property {string} CARDBOARD_PAPER_PLASTIC - Represents the cardboard, paper, plastic custom icon.
+ * @property {string} ALUMINUM_CANS_BATTERIES_GLASS_BULBS_PAPER_PLASTIC - Represents the aluminum cans, batteries, glass, bulbs, paper, plastic custom icon.
+ * @property {string} BATTERIES_USED_MOTOR_OIL_USED_OIL - Represents the batteries, used motor oil, used oil custom icon.
+ * @property {string} CLOTHING - Represents the clothing custom icon.
+ * @property {string} ALUMINUM_CANS_BATTERIES_GLASS_BULBS_PLASTIC - Represents the aluminum cans, batteries, glass, bulbs, plastic custom icon.
+ * @property {string} BATTERIES_GLASS_PAPER - Represents the batteries, glass, paper custom icon.
+ * @property {string} SMALL_APPLIANCES_BATTERIES_BULBS - Represents the small appliances, batteries, bulbs custom icon.
+ * @property {string} CARDBOARD_POLYSTYRENE_BULKY_WASTE - Represents the cardboard, polystyrene, bulky waste custom icon.
+ * @property {string} ALUMINUM_CANS_SMALL_APPLIANCES_BATTERIES_GLASS_BULBS_PAPER_PLASTIC - Represents the aluminum cans, small appliances, batteries, glass, bulbs, paper, plastic custom icon.
+ */
 export const CustomIconType = {
     ALL: "all",
     GLASS: "glass",
@@ -32,6 +56,11 @@ export const CustomIconType = {
     ALUMINUM_CANS_SMALL_APPLIANCES_BATTERIES_GLASS_BULBS_PAPER_PLASTIC: "aluminum cans, small appliances, batteries, glass, bulbs, paper, plastic"
 };
 
+/**
+ * Returns a custom icon based on the provided type_color.
+ * @param {string} type_color - The type color of the icon.
+ * @returns {Icon} - The custom icon.
+ */
 export const getCustomIcon = (type_color) => {
     let iconUrl = require("./icon/icon.png");
     let iconSize = [38, 38];

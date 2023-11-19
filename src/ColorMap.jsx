@@ -15,6 +15,20 @@ import './index.css';
 import countries from './population.json';
 import trashcans from './trash_cans.json';
 
+/**
+ * Array of data scopes.
+ * @typedef {Object} DataScope
+ * @property {string} name - The name of the data scope.
+ * @property {string} key - The key of the data scope.
+ * @property {string} description - The description of the data scope.
+ * @property {string} unit - The unit of the data scope.
+ * @property {number[]} scale - The scale of the data scope.
+ */
+
+/**
+ * Array of data scopes.
+ * @type {DataScope[]}
+ */
 const dataScopes = [
     {
         name: "Population",
@@ -39,11 +53,20 @@ const dataScopes = [
     }
 ];
 
+/**
+ * Array of color palettes.
+ * @type {Array<Array<string>>}
+ */
 const colors = [
     ['#fcfca7', '#f4e283', '#eec762', '#e8ab44', '#e28d2b', '#dc6e16', '#d4490a', '#cb0c0c'],
     ['#ffffd9', '#edf8b1', '#c7e9b4', '#7fcdbb', '#41b6c4', '#1d91c0', '#225ea8', '#253494', '#081d58']
 ]
 
+/**
+ * Renders a Choropleth Map component.
+ *
+ * @returns {JSX.Element} The Choropleth Map component.
+ */
 export default function ChoroplethMap() {
     const [dataScope, setDataScope] = useState(dataScopes[0]);
     const [selectedCountry, setSelectedCountry] = useState(null);
@@ -65,6 +88,10 @@ export default function ChoroplethMap() {
         setCanScope(event.target.value);
     }
 
+    /**
+     * Highlights a feature on the map and updates the hovered country state.
+     * @param {Object} e - The event object.
+     */
     const highlightFeature = (e) => {
         let layer = e.target;
         layer.setStyle({
@@ -75,6 +102,10 @@ export default function ChoroplethMap() {
         setHoveredCountry(layer.feature.properties);
     }
 
+    /**
+     * Resets the highlight of a target element.
+     * @param {Event} e - The event object.
+     */
     const resetHighlight = (e) => {
         e.target.setStyle({
             color: '#888',
@@ -83,11 +114,16 @@ export default function ChoroplethMap() {
         setHoveredCountry(null);
     }
 
+    /**
+     * Callback function for each feature in the map layer.
+     * @param {Object} feature - The feature object.
+     * @param {Object} layer - The layer object.
+     */
     const onEachFeature = useCallback((feature, layer) => {
         var dataName = dataScope.key;
-            if (dataScope.key === 'pop') {
-                dataName = 'pop' + timeScope;
-            }
+        if (dataScope.key === 'pop') {
+            dataName = 'pop' + timeScope;
+        }
 
         if (geoMap.current) {
             const current = geoMap.current.getLayers().find(e => e.feature.properties.iso_a3 === feature.properties.iso_a3);
@@ -101,8 +137,13 @@ export default function ChoroplethMap() {
                 click: () => setSelectedCountry(feature.properties)
             });
         }
-    }, [dataScope])
+    }, [dataScope]);
 
+    /**
+     * Returns the style object for a given feature.
+     * @param {Object} feature - The feature object.
+     * @returns {Object} The style object.
+     */
     const style = useCallback((feature) => {
         let mapStyle = {
             fillColor: getColor(feature.properties[dataScope.key + timeScope], colors, dataScope.scale),
@@ -121,11 +162,16 @@ export default function ChoroplethMap() {
         [style, onEachFeature]
     );
 
+    /**
+     * Creates a custom icon for a cluster.
+     * @param {Object} cluster - The cluster object.
+     * @returns {Object} - The custom icon for the cluster.
+     */
     const createClusterCustomIcon = function (cluster) {
         return new divIcon({
-        html: `<span class="cluster-icon">${cluster.getChildCount()}</span>`,
-        className: "custom-marker-cluster",
-        iconSize: point(33, 33, true)
+            html: `<span class="cluster-icon">${cluster.getChildCount()}</span>`,
+            className: "custom-marker-cluster",
+            iconSize: point(33, 33, true)
         });
     };
 
