@@ -1,4 +1,6 @@
 # Trash Can Analysis Dashboard for Timisoara
+Grand Award Winner at Hackathon
+More details in this post: https://www.linkedin.com/posts/matheus-santos-melo_gis-esg-urbanplanning-ugcPost-7132766571172675584-4Gt8/?utm_source=share&utm_medium=member_desktop&rcm=ACoAACdmMNEBW_sNSOhzJadnVXKK3y506XobX84
 
 This project is a React-based dashboard that analysis the availabilty of trash cans and forecasts the mismatch between supply and demand in Timisoara across space and time with AI. empowering policymakers to better posiiton new investments on recycling and waste management  infrastructure as well as citizens looking for where to recycle their trash
 
